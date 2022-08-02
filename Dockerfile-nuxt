@@ -1,0 +1,7 @@
+
+FROM node:12
+WORKDIR /client
+RUN npm install
+CMD ["yarn","install"]
+CMD [ "yarn", "run","start" ]
+

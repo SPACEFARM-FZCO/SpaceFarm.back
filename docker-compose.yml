@@ -1,0 +1,56 @@
+version: '3.1'
+
+services:
+ 
+  spacefarm:
+   user: root
+   build: 
+     context: .
+     dockerfile: Dockerfile-SpaceFarm
+   container_name: spacefarm
+   restart: always
+   ports:
+     - 8000:80
+   command: /bin/sh -c "uvicorn server:app --reload --host 0.0.0.0 --port 80"
+   volumes:
+     - ./app/:/app
+
+  mongo:
+   image: mongo:4.0 
+   container_name: spacefarm-mongo
+   environment:
+     MONGO_INITDB_ROOT_USERNAME: kxlgpBrqQy
+     MONGO_INITDB_ROOT_PASSWORD: 0XRH6rvwGA
+   ports:
+     - 27017:27017
+   volumes:
+     - "./.docker/db:/data/db"
+
+     
+  nuxtjs:
+   user: root
+   restart: always
+   build: 
+     context: .
+     dockerfile: Dockerfile-nuxt
+   container_name: spacefarm-nuxtjs
+   command: /bin/sh -c "yarn install && yarn run start"
+   volumes:
+     - ./client:/client
+   working_dir: /client
+   ports:
+    - "3000:3000"
+   environment:
+    HOST: 0.0.0.0 
+
+  rabbitmq:
+    image: 'rabbitmq:3.6-management-alpine'
+    container_name: spacefarm-rmq
+    ports:
+      - '5672:5672'
+      - '15672:15672'
+    volumes:
+      - '/app/.docker/rabbitmq:/var/lib/rabbitmq/mnesia'
+    environment:
+      RABBITMQ_DEFAULT_USER: "spacefarmrmq"
+      RABBITMQ_DEFAULT_PASS: "TGbS4E382KhwKQk"

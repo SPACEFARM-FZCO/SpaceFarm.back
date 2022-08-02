@@ -1,0 +1,8 @@
+FROM python:3
+RUN pip install fastapi uvicorn pyjwt
+RUN pip install requests
+RUN pip install pymessenger
+RUN pip install motor pika
+ENV DOCKER=true
+COPY ./app /app
+WORKDIR /app

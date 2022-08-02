@@ -1,0 +1,4 @@
+
+app/.vscode/sftp.json
+*.pyc
+app/id_rda
